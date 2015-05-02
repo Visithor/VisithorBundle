@@ -1,0 +1,39 @@
+{
+    "name": "visithor/visithor-bundle",
+    "description": "Visithor Bundle for Symfony",
+    "keywords": ["visithor", "php", "Symfony", "Ping"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marc Morera",
+            "email": "yuhu@mmoreram.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "symfony/config": "~2.6",
+        "symfony/dependency-injection": "~2.6",
+        "symfony/console": "~2.6",
+        "symfony/routing": "~2.6",
+
+        "visithor/visithor": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": ">=3.7"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-4": {
+            "Visithor\\Bundle\\": ""
+        }
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    }
+}
