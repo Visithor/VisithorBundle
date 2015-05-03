@@ -17,6 +17,7 @@ use Exception;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Exception\ExceptionInterface;
 use Symfony\Component\Routing\Router;
+use Symfony\Bundle\FrameworkBundle\Client as FrameworkClient;
 
 use Visithor\Bundle\Environment\Interfaces\EnvironmentBuilderInterface;
 use Visithor\Client\Interfaces\ClientInterface;
@@ -28,7 +29,7 @@ use Visithor\Model\Url;
 class SymfonyClient implements ClientInterface
 {
     /**
-     * @var ClientInterface
+     * @var FrameworkClient
      *
      * Client
      */
@@ -57,6 +58,16 @@ class SymfonyClient implements ClientInterface
         EnvironmentBuilderInterface $environmentBuilder = null
     )
     {
+        $this->environmentBuilder = $environmentBuilder;
+    }
+
+    /**
+     * Build client
+     *
+     * @return $this Self object
+     */
+    public function buildClient()
+    {
         $this->kernel = new \AppKernel('test', false);
         $this->kernel->boot();
 
@@ -65,10 +76,9 @@ class SymfonyClient implements ClientInterface
             ->getContainer()
             ->get('test.client');
 
-        if ($environmentBuilder instanceof EnvironmentBuilderInterface) {
+        if ($this->environmentBuilder instanceof EnvironmentBuilderInterface) {
 
-            $this->environmentBuilder = $environmentBuilder;
-            $environmentBuilder->setUp($this->kernel);
+            $this->environmentBuilder->setUp($this->kernel);
         }
     }
 
@@ -100,9 +110,11 @@ class SymfonyClient implements ClientInterface
     }
 
     /**
-     * Destroy
+     * Destroy client
+     *
+     * @return $this Self object
      */
-    public function __destruct()
+    public function destroyClient()
     {
         if ($this->environmentBuilder instanceof EnvironmentBuilderInterface) {
 

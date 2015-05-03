@@ -18,7 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Visithor\Command\GoCommand as OriginalGoCommand;
 use Visithor\Executor\Executor;
 use Visithor\Generator\UrlGenerator;
-use Visithor\Reader\Interfaces\ConfigurationReaderInterface;
 use Visithor\Renderer\RendererFactory;
 
 /**
