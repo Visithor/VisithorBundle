@@ -14,10 +14,10 @@
 namespace Visithor\Bundle\Client;
 
 use Exception;
+use Symfony\Bundle\FrameworkBundle\Client as FrameworkClient;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Exception\ExceptionInterface;
 use Symfony\Component\Routing\Router;
-use Symfony\Bundle\FrameworkBundle\Client as FrameworkClient;
 
 use Visithor\Bundle\Environment\Interfaces\EnvironmentBuilderInterface;
 use Visithor\Client\Interfaces\ClientInterface;
