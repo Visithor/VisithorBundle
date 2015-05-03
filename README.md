@@ -1,6 +1,11 @@
 Visithor Bundle for Symfony
 ===========================
 
+[![Build Status](https://travis-ci.org/visithor/VisithorBundle.png?branch=master)](https://travis-ci.org/visithor/VisithorBundle)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Visithor/VisithorBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Visithor/VisithorBundle/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/visithor/visithor-bundle/v/stable.png)](https://packagist.org/packages/visithor/visithor-bundle)
+[![Latest Unstable Version](https://poser.pugx.org/visithor/visithor-bundle/v/unstable.png)](https://packagist.org/packages/visithor/visithor-bundle)
+
 Symfony Bundle for PHP Package [visithor](http://github.com/visithor/visithor),
 a library that provides you a simple and painless way of testing your 
 application routes with specific HTTP Codes.
