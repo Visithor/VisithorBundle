@@ -1,0 +1,13 @@
+services:
+
+    #
+    # Commands
+    #
+    visithor.command.go:
+        class: Visithor\Bundle\Command\GoCommand
+        arguments:
+            - @visithor.url_generator
+            - @visithor.renderer_factory
+            - @visithor.executor
+        tags:
+            -  { name: console.command }

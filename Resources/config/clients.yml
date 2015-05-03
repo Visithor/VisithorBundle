@@ -1,0 +1,9 @@
+services:
+
+    #
+    # Clients
+    #
+    visithor.client:
+        class: Visithor\Bundle\Client\SymfonyClient
+        arguments:
+            - @?visitor.environment_builder

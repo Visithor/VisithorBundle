@@ -1,0 +1,10 @@
+services:
+
+    #
+    # Factories
+    #
+    visithor.factory.url:
+        class: Visithor\Factory\UrlFactory
+
+    visithor.factory.url_chain:
+        class: Visithor\Factory\UrlChainFactory

@@ -1,0 +1,9 @@
+services:
+
+    #
+    # Executors
+    #
+    visithor.executor:
+        class: Visithor\Executor\Executor
+        arguments:
+            - @visithor.client

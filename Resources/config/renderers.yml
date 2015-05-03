@@ -1,0 +1,7 @@
+services:
+
+    #
+    # Renderers
+    #
+    visithor.renderer_factory:
+        class: Visithor\Renderer\RendererFactory
