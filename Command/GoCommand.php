@@ -53,19 +53,17 @@ class GoCommand extends OriginalGoCommand
      * @param RendererFactory $rendererFactory Render factory
      * @param Executor        $executor        Executor
      */
-    function __construct(
+    public function __construct(
         UrlGenerator $urlGenerator,
         RendererFactory $rendererFactory,
         Executor $executor
-    )
-    {
+    ) {
         parent::__construct();
 
         $this->urlGenerator = $urlGenerator;
         $this->rendererFactory = $rendererFactory;
         $this->executor = $executor;
     }
-
 
     /**
      * Executes all business logic inside this command
@@ -82,8 +80,7 @@ class GoCommand extends OriginalGoCommand
         OutputInterface $output,
         array $config,
         $format
-    )
-    {
+    ) {
         $urlChain = $this
             ->urlGenerator
             ->generate($config);

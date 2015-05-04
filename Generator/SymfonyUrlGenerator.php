@@ -39,12 +39,11 @@ class SymfonyUrlGenerator extends UrlGenerator
      * @param UrlChainFactory $urlChainFactory UrlChain factory
      * @param RouterInterface $router          Router
      */
-    function __construct(
+    public function __construct(
         UrlFactory $urlFactory,
         UrlChainFactory $urlChainFactory,
         RouterInterface $router
-    )
-    {
+    ) {
         parent::__construct(
             $urlFactory,
             $urlChainFactory
