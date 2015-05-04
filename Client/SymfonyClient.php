@@ -16,8 +16,6 @@ namespace Visithor\Bundle\Client;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Client as FrameworkClient;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Routing\Exception\ExceptionInterface;
-use Symfony\Component\Routing\Router;
 
 use Visithor\Bundle\Environment\Interfaces\EnvironmentBuilderInterface;
 use Visithor\Client\Interfaces\ClientInterface;
@@ -56,8 +54,7 @@ class SymfonyClient implements ClientInterface
      */
     public function __construct(
         EnvironmentBuilderInterface $environmentBuilder = null
-    )
-    {
+    ) {
         $this->environmentBuilder = $environmentBuilder;
     }
 
@@ -77,7 +74,6 @@ class SymfonyClient implements ClientInterface
             ->get('test.client');
 
         if ($this->environmentBuilder instanceof EnvironmentBuilderInterface) {
-
             $this->environmentBuilder->setUp($this->kernel);
         }
     }
@@ -100,9 +96,7 @@ class SymfonyClient implements ClientInterface
                 ->client
                 ->getResponse()
                 ->getStatusCode();
-
         } catch (Exception $e) {
-
             $result = 500;
         }
 
@@ -117,8 +111,7 @@ class SymfonyClient implements ClientInterface
     public function destroyClient()
     {
         if ($this->environmentBuilder instanceof EnvironmentBuilderInterface) {
-
-            $this->environmentBuilder->setUp($this->kernel);
+            $this->environmentBuilder->tearDown($this->kernel);
         }
     }
 }
