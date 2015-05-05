@@ -13,62 +13,46 @@
 
 namespace Visithor\Bundle\DependencyInjection;
 
-use Elcodi\Bundle\CoreBundle\DependencyInjection\Abstracts\AbstractExtension;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * Class VisithorExtension
  */
-class VisithorExtension extends AbstractExtension
+class VisithorExtension extends Extension
 {
     /**
-     * @var string
+     * Loads a specific configuration.
      *
-     * Extension name
-     */
-    const EXTENSION_NAME = 'visithor';
-
-    /**
-     * Get the Config file location
+     * @param array            $config    An array of configuration values
+     * @param ContainerBuilder $container A ContainerBuilder instance
      *
-     * @return string Config file location
+     * @throws \InvalidArgumentException When provided tag is not defined in this extension
+     *
+     * @api
      */
-    public function getConfigFilesLocation()
+    public function load(array $config, ContainerBuilder $container)
     {
-        return __DIR__ . '/../Resources/config';
+        $loader = new YamlFileLoader(
+            $container, new
+            FileLocator(__DIR__.'/../Resources/config')
+        );
+
+        $loader->load('clients.yml');
+        $loader->load('commands.yml');
+        $loader->load('factories.yml');
+        $loader->load('generators.yml');
+        $loader->load('executors.yml');
+        $loader->load('renderers.yml');
     }
 
     /**
-     * Config files to load
-     *
-     * return array(
-     *      'file1.yml',
-     *      'file2.yml',
-     *      ...
-     * );
-     *
-     * @param array $config Config
-     *
-     * @return array Config files
-     */
-    public function getConfigFiles(array $config)
-    {
-        return [
-            'clients',
-            'commands',
-            'executors',
-            'factories',
-            'generators',
-            'renderers',
-        ];
-    }
-
-    /**
-     * Returns the extension alias, same value as extension name
-     *
-     * @return string The alias
+     * @return string
      */
     public function getAlias()
     {
-        return self::EXTENSION_NAME;
+        return 'visithor';
     }
 }
