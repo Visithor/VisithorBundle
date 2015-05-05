@@ -14,6 +14,24 @@ Please read [Visithor](http://github.com/visithor/visithor) documentation in
 order to understand the final purpose of this project and how you should create
 your config files.
 
+## Installation
+
+All you need to do is add this package in your composer under `require-dev` 
+block and you will be able to test your application.
+
+``` yaml
+'require-dev':
+    ...
+    
+    'visithor/visithor-bundle': '~0.1'
+```
+
+Then you have to update your dependencies.
+
+``` bash
+php composer.phar update
+```
+
 ## Integration
 
 This Bundle integrates the project in your Symfony project. This means that adds
