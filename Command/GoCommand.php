@@ -81,20 +81,30 @@ class GoCommand extends OriginalGoCommand
         array $config,
         $format
     ) {
-        $urlChain = $this
-            ->urlGenerator
-            ->generate($config);
-
         $renderer = $this
             ->rendererFactory
             ->create($format);
 
-        return $this
+        $this
+            ->executor
+            ->build();
+
+        $urlChain = $this
+            ->urlGenerator
+            ->generate($config);
+
+        $result = $this
             ->executor
             ->execute(
                 $urlChain,
                 $renderer,
                 $output
             );
+
+        $this
+            ->executor
+            ->destroy();
+
+        return $result;
     }
 }
