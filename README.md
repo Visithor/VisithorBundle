@@ -39,7 +39,7 @@ all the commands in your project console, so when you do `app/console` you will
 see the `visithor:*` commands.
 
 ``` bash
-php app/console visithor:go
+php app/console visithor:go --env=test
 ```
 
 ## Config
@@ -85,11 +85,27 @@ Maybe you need to prepare your environment before Visithor tests your routes,
 right? Prepare your database, load your fixtures, and whatever you need to make
 your test installation works.
 
-For this reason, you can define a service called `visitor.environment_builder`
-than implements the interface 
-`Visithor\Bundle\Environment\Interfaces\EnvironmentBuilderInterface`.
+By default, VisithorBundle has a simple implementation already working. This
+implementation takes care about building the database and creating your schema.
 
-> You don't need to define such service because is injected if exists
+``` bash
+php app/console doctrine:database:create
+php app/console doctrine:schema:update
+```
+
+It takes care as well of the destruction of your testing database once your test
+is finished.
+
+``` bash
+php app/console doctrine:database:drop --force
+```
+
+If you want to extend this behavior, for example for some fixtures load, then
+you need to do your own implementation, or extend this one.
+
+To implement your own, you should define a service called 
+`visitor.environment_builder` than implements the interface 
+`Visithor\Bundle\Environment\Interfaces\EnvironmentBuilderInterface`.
 
 If you take a look at this interface, you will se that you need to define two 
 methods. The first one is intended to setUp your environment and will be called 
@@ -131,29 +147,53 @@ class EnvironmentBuilder implements EnvironmentBuilderInterface
 }
 ```
 
-You can call some commands just creating a new Application given the Kernel is
-passed as parameter and calling the commands with their parameters.
+This is the way you can overwrite completely the default implementation, but if
+you just want to extend it, then is much simpler. Take a look at this example.
 
 ``` php
+namespace Elcodi\Common\VisithorBridgeBundle\Visithor;
+
+use Doctrine\DBAL\Connection;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Visithor\Bundle\Environment\SymfonyEnvironmentBuilder;
+
 /**
- * Set up environment
- *
- * @param KernelInterface $kernel Kernel
- *
- * @return $this Self object
+ * Class EnvironmentBuilder
  */
-public function setUp(KernelInterface $kernel)
+class EnvironmentBuilder extends SymfonyEnvironmentBuilder
 {
-    $application = new Application($kernel);
-    $application->setAutoExit(false);
-    
-    $application->run(new ArrayInput(
-        'command' => 'doctrine:database:create',
-        '--env' => 'test',
-        '--quiet' => true,
-    ));
+    /**
+     * Set up environment
+     *
+     * @param KernelInterface $kernel Kernel
+     *
+     * @return $this Self object
+     */
+    public function setUp(KernelInterface $kernel)
+    {
+        parent::setUp($kernel);
+
+        $this
+            ->executeCommand('doctrine:fixtures:load', [
+                '--fixtures' => $kernel
+                        ->getRootDir() . '/../src/Elcodi/Fixtures',
+            ])
+            ->executeCommand('elcodi:templates:load')
+            ->executeCommand('elcodi:templates:enable', [
+                'template' => 'StoreTemplateBundle',
+            ])
+            ->executeCommand('elcodi:plugins:load')
+            ->executeCommand('assets:install')
+            ->executeCommand('assetic:dump');
+    }
 }
 ```
+
+To call some commands you can use the protected method called `executeCommand`,
+but remember to call the parent method in order to initialize the application 
+and call the already existing code.
 
 ## Roles
 
