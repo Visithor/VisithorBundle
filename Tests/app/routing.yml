@@ -1,0 +1,11 @@
+public_route:
+    path: /public
+    defaults: { _controller: FakeBundle:Fake:default }
+
+admin_route:
+    path: /admin
+    defaults: { _controller: FakeBundle:Fake:default }
+
+superadmin_route:
+    path: /superadmin
+    defaults: { _controller: FakeBundle:Fake:default }

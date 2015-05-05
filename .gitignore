@@ -3,3 +3,5 @@
 /composer.phar
 /composer.lock
 /phpunit.xml
+/Tests/app/cache
+/Tests/app/logs

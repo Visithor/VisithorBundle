@@ -6,4 +6,5 @@ services:
     visithor.client:
         class: Visithor\Bundle\Client\SymfonyClient
         arguments:
+            - @session
             - @?visitor.environment_builder
