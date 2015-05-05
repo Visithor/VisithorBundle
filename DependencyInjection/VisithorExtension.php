@@ -37,7 +37,7 @@ class VisithorExtension extends Extension
     {
         $loader = new YamlFileLoader(
             $container, new
-            FileLocator(__DIR__.'/../Resources/config')
+            FileLocator(__DIR__ . '/../Resources/config')
         );
 
         $loader->load('clients.yml');
@@ -46,6 +46,7 @@ class VisithorExtension extends Extension
         $loader->load('generators.yml');
         $loader->load('executors.yml');
         $loader->load('renderers.yml');
+        $loader->load('environmentBuilders.yml');
     }
 
     /**

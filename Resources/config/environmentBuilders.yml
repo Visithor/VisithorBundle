@@ -1,0 +1,7 @@
+services:
+
+    #
+    # Environment Builders
+    #
+    visitor.environment_builder:
+        class: Visithor\Bundle\Environment\SymfonyEnvironmentBuilder
