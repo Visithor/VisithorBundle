@@ -15,7 +15,11 @@ namespace Visithor\Bundle\Client;
 
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Client as FrameworkClient;
+use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 use Visithor\Bundle\Environment\Interfaces\EnvironmentBuilderInterface;
 use Visithor\Client\Interfaces\ClientInterface;
@@ -41,6 +45,13 @@ class SymfonyClient implements ClientInterface
     protected $kernel;
 
     /**
+     * @var SessionInterface
+     *
+     * Session
+     */
+    protected $session;
+
+    /**
      * @var EnvironmentBuilderInterface
      *
      * Environment Builder
@@ -53,8 +64,10 @@ class SymfonyClient implements ClientInterface
      * @param EnvironmentBuilderInterface $environmentBuilder Environment Builder
      */
     public function __construct(
+        SessionInterface $session,
         EnvironmentBuilderInterface $environmentBuilder = null
     ) {
+        $this->session = $session;
         $this->environmentBuilder = $environmentBuilder;
     }
 
@@ -88,6 +101,8 @@ class SymfonyClient implements ClientInterface
     public function getResponseHTTPCode(Url $url)
     {
         try {
+            $this->authenticate($url);
+
             $this
                 ->client
                 ->request('GET', $url->getPath());
@@ -96,11 +111,39 @@ class SymfonyClient implements ClientInterface
                 ->client
                 ->getResponse()
                 ->getStatusCode();
+        } catch (AccessDeniedHttpException $e) {
+            $result = $e->getStatusCode();
         } catch (Exception $e) {
             $result = 500;
         }
 
         return $result;
+    }
+
+    private function authenticate(Url $url)
+    {
+        if (
+            !$url->getOption('role') ||
+            !$url->getOption('firewall')
+        ) {
+            return $this;
+        }
+
+        $session = $this->session;
+        $firewall = $url->getOption('firewall');
+        $role = $url->getOption('role');
+        $token = new UsernamePasswordToken('mmoreram', null, $firewall, [$role]);
+        $session->set('_security_' . $firewall, serialize($token));
+        $session->save();
+
+        $cookie = new Cookie(
+            $session->getName(),
+            $session->getId()
+        );
+        $this
+            ->client
+            ->getCookieJar()
+            ->set($cookie);
     }
 
     /**

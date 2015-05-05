@@ -18,7 +18,11 @@
 
     <testsuites>
         <testsuite name="extractor Test Suite">
-            <directory>./tests/</directory>
+            <directory>./Tests/</directory>
         </testsuite>
     </testsuites>
+
+    <php>
+        <server name="KERNEL_DIR" value="./Tests/app/" />
+    </php>
 </phpunit>

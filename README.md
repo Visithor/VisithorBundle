@@ -60,3 +60,135 @@ urls:
     - [[store_category_products_list, {'slug': 'another-name', 'id': 1}], 302]
     - [[store_homepage, {_locale: es}]]
 ```
+
+## Environment
+
+Maybe you need to prepare your environment before Visithor tests your routes,
+right? Prepare your database, load your fixtures, and whatever you need to make
+your test installation works.
+
+For this reason, you can define a service called `visitor.environment_builder`
+than implements the interface 
+`Visithor\Bundle\Environment\Interfaces\EnvironmentBuilderInterface`.
+
+> You don't need to define such service because is injected if exists
+
+If you take a look at this interface, you will se that you need to define two 
+methods. The first one is intended to setUp your environment and will be called 
+just once at the beginning of the suite. The second one will tear down such 
+environment (for example removing database).
+
+``` php
+use Symfony\Component\HttpKernel\KernelInterface;
+use Visithor\Bundle\Environment\Interfaces\EnvironmentBuilderInterface;
+
+/**
+ * Class EnvironmentBuilder
+ */
+class EnvironmentBuilder implements EnvironmentBuilderInterface
+{
+    /**
+     * Set up environment
+     *
+     * @param KernelInterface $kernel Kernel
+     *
+     * @return $this Self object
+     */
+    public function setUp(KernelInterface $kernel)
+    {
+        //
+    }
+
+    /**
+     * Tear down environment
+     *
+     * @param KernelInterface $kernel Kernel
+     *
+     * @return $this Self object
+     */
+    public function tearDown(KernelInterface $kernel)
+    {
+        //
+    }
+}
+```
+
+You can call some commands just creating a new Application given the Kernel is
+passed as parameter and calling the commands with their parameters.
+
+``` php
+/**
+ * Set up environment
+ *
+ * @param KernelInterface $kernel Kernel
+ *
+ * @return $this Self object
+ */
+public function setUp(KernelInterface $kernel)
+{
+    $application = new Application($kernel);
+    $application->setAutoExit(false);
+    
+    $application->run(new ArrayInput(
+        'command' => 'doctrine:database:create',
+        '--env' => 'test',
+        '--quiet' => true,
+    ));
+}
+```
+
+## Roles
+
+You will, for sure, have the need to test your private routes. Of course, this
+is a common need and this bundle satisfies it :)
+
+Let's check our simple security file.
+
+``` yaml
+security:
+
+    providers:
+        in_memory:
+            memory: ~
+
+    firewalls:
+        default:
+            provider: in_memory
+            http_basic: ~
+            anonymous: ~
+
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/superadmin, roles: ROLE_SUPERADMIN }
+```
+
+Then, let's see our Visithor configuration.
+
+``` yaml
+urls:
+    - ['/', 200]
+    - ['/admin', 200, {'role': 'ROLE_ADMIN', 'firewall': 'default'}]
+    - ['/superadmin', 403, {'role': 'ROLE_ADMIN', 'firewall': 'default'}]
+```
+
+In this case, all routes are under the default firewall, called `default`.
+
+Route `admin_route` is protected by the access role `ROLE_ADMIN`, and because we 
+are testing against this role, then we'll receive a 200.
+
+Route `superadmin_route` is protected by the access role `ROLE_SUPERADMIN`, but
+in this case we are testing again using role `ROLE_ADMIN`, so we'll receive a
+403 code.
+
+Of course, you can define your firewall as a global option. Your routes will 
+apply security only if both role and firewall options are defined.
+
+``` yaml
+defaults:
+    options:
+        firewall: default
+urls:
+    - ['/', 200]
+    - ['/admin', 200, {'role': 'ROLE_ADMIN'}]
+    - ['/superadmin', 403, {'role': 'ROLE_ADMIN'}]
+```

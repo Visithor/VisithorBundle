@@ -1,0 +1,13 @@
+defaults:
+    options:
+        firewall: 'default'
+urls:
+    - ['/public', 200]
+    - ['public_route', 200]
+    - ['admin_route', 200, {'role': 'ROLE_ADMIN'}]
+    - ['/admin', 200, {'role': 'ROLE_ADMIN'}]
+    - ['admin_route', 200, {'role': 'ROLE_ADMIN', 'firewall': 'default'}]
+    - ['admin_route', 403, {'role': 'ROLE_ANOTHER', 'firewall': 'default'}]
+    - ['admin_route', 403, {'firewall': 'default'}]
+    - ['superadmin_route', 403, {'role': 'ROLE_ADMIN', 'firewall': 'default'}]
+    - ['superadmin_route', 403, {'role': 'ROLE_ADMIN', 'firewall': 'nonexists'}]
