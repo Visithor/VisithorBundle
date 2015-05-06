@@ -1,0 +1,7 @@
+services:
+
+    #
+    # Visithor Bridge
+    #
+    visitor.environment_builder:
+        class: Visithor\Bundle\Tests\FakeBundle\Environment\EnvironmentBuilder

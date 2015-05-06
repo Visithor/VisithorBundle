@@ -144,6 +144,18 @@ class EnvironmentBuilder implements EnvironmentBuilderInterface
     {
         //
     }
+
+    /**
+     * Get authenticated user
+     *
+     * @param string $role Role
+     *
+     * @return mixed User for authentication
+     */
+    public function getAuthenticationUser($role)
+    {
+        //
+    }
 }
 ```
 
@@ -250,3 +262,32 @@ urls:
     - ['/admin', 200, {'role': 'ROLE_ADMIN'}]
     - ['/superadmin', 403, {'role': 'ROLE_ADMIN'}]
 ```
+
+Because you need to authenticate a real user in order to make it work, in your
+own EnvironmentBuilder implementation you will be able to return this user. Make
+sure that your testing environment is prepared to be tested.
+
+Let's see a real example about an implementation of this method.
+
+``` php
+/**
+ * Get authenticated user
+ *
+ * @param string $role Role
+ *
+ * @return mixed User for authentication
+ */
+public function getAuthenticationUser($role)
+{
+    return 'ROLE_ADMIN' === $role
+        ? $this
+            ->adminUserRepository
+            ->findOneBy([
+                'email' => 'admin@admin.com'
+            ])
+        : null;
+}
+```
+
+As you can see, the parameter received is the role you are intended to test, so
+you can switch between users depending on that value.

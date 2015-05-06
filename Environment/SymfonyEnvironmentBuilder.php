@@ -67,6 +67,18 @@ class SymfonyEnvironmentBuilder implements EnvironmentBuilderInterface
     }
 
     /**
+     * Get authenticated user
+     *
+     * @param string $role Role
+     *
+     * @return mixed User for authentication
+     */
+    public function getAuthenticationUser($role)
+    {
+        return 'admin';
+    }
+
+    /**
      * Execute a command
      *
      * @param string $command    Command

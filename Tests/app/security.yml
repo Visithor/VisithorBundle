@@ -2,7 +2,11 @@ security:
 
     providers:
         in_memory:
-            memory: ~
+            memory:
+                users:
+                    admin:
+                        password: 1234
+                        roles: 'ROLE_ADMIN'
 
     firewalls:
         default:

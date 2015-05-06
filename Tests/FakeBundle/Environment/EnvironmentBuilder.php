@@ -11,14 +11,16 @@
  * @author Marc Morera <yuhu@mmoreram.com>
  */
 
-namespace Visithor\Bundle\Environment\Interfaces;
+namespace Visithor\Bundle\Tests\FakeBundle\Environment;
 
 use Symfony\Component\HttpKernel\KernelInterface;
 
+use Visithor\Bundle\Environment\Interfaces\EnvironmentBuilderInterface;
+
 /**
- * Interface EnvironmentBuilderInterface
+ * Class EnvironmentBuilder
  */
-interface EnvironmentBuilderInterface
+class EnvironmentBuilder implements EnvironmentBuilderInterface
 {
     /**
      * Set up environment
@@ -27,7 +29,10 @@ interface EnvironmentBuilderInterface
      *
      * @return $this Self object
      */
-    public function setUp(KernelInterface $kernel);
+    public function setUp(KernelInterface $kernel)
+    {
+        return $this;
+    }
 
     /**
      * Tear down environment
@@ -36,7 +41,10 @@ interface EnvironmentBuilderInterface
      *
      * @return $this Self object
      */
-    public function tearDown(KernelInterface $kernel);
+    public function tearDown(KernelInterface $kernel)
+    {
+        return $this;
+    }
 
     /**
      * Get authenticated user
@@ -45,5 +53,8 @@ interface EnvironmentBuilderInterface
      *
      * @return mixed User for authentication
      */
-    public function getAuthenticationUser($role);
+    public function getAuthenticationUser($role)
+    {
+        return 'admin';
+    }
 }
