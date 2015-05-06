@@ -57,7 +57,6 @@ class VisithorGoTest extends WebTestCase
         $result = static::$application->run(new ArrayInput([
             'command' => 'visithor:go',
             '--config' => static::$kernel->getRootDir(),
-            '--quiet' => true,
         ]));
 
         $this->assertEquals(

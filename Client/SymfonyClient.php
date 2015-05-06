@@ -80,15 +80,16 @@ class SymfonyClient implements ClientInterface
     {
         $this->kernel = new \AppKernel('test', false);
         $this->kernel->boot();
+        $this->session->clear();
 
         $this->client = $this
             ->kernel
             ->getContainer()
             ->get('test.client');
 
-        if ($this->environmentBuilder instanceof EnvironmentBuilderInterface) {
-            $this->environmentBuilder->setUp($this->kernel);
-        }
+        $this
+            ->environmentBuilder
+            ->setUp($this->kernel);
     }
 
     /**
@@ -102,10 +103,11 @@ class SymfonyClient implements ClientInterface
     {
         try {
             $this->authenticate($url);
+            $verb = $url->getOption('verb', 'GET');
 
             $this
                 ->client
-                ->request('GET', $url->getPath());
+                ->request($verb, $url->getPath());
 
             $result = $this
                 ->client
@@ -114,13 +116,25 @@ class SymfonyClient implements ClientInterface
         } catch (AccessDeniedHttpException $e) {
             $result = $e->getStatusCode();
         } catch (Exception $e) {
-            $result = 500;
+            $result = 'ERR';
         }
+
+        $this->expireAuthentication($url);
 
         return $result;
     }
 
-    private function authenticate(Url $url)
+    /**
+     * Authenticates a user if is needed.
+     *
+     * A user is needed to be authenticated if in the url a role and a firewall
+     * is specified. Otherwise, the system will understand that is a public url
+     *
+     * @param Url $url Url
+     *
+     * @return $this Self object
+     */
+    protected function authenticate(Url $url)
     {
         if (
             !$url->getOption('role') ||
@@ -132,7 +146,11 @@ class SymfonyClient implements ClientInterface
         $session = $this->session;
         $firewall = $url->getOption('firewall');
         $role = $url->getOption('role');
-        $token = new UsernamePasswordToken('mmoreram', null, $firewall, [$role]);
+        $user = $this
+            ->environmentBuilder
+            ->getAuthenticationUser($url->getOption('role'));
+
+        $token = new UsernamePasswordToken($user, null, $firewall, [$role]);
         $session->set('_security_' . $firewall, serialize($token));
         $session->save();
 
@@ -144,6 +162,29 @@ class SymfonyClient implements ClientInterface
             ->client
             ->getCookieJar()
             ->set($cookie);
+
+        return $this;
+    }
+
+    /**
+     * Expires the authentication if these has been created
+     *
+     * @param Url $url Url
+     *
+     * @return $this Self object
+     */
+    protected function expireAuthentication(Url $url)
+    {
+        $session = $this->session;
+        $session->remove('_security_' . $url->getOption('firewall'));
+        $session->save();
+
+        $this
+            ->client
+            ->getCookieJar()
+            ->expire($session->getName());
+
+        return $this;
     }
 
     /**
@@ -153,8 +194,8 @@ class SymfonyClient implements ClientInterface
      */
     public function destroyClient()
     {
-        if ($this->environmentBuilder instanceof EnvironmentBuilderInterface) {
-            $this->environmentBuilder->tearDown($this->kernel);
-        }
+        $this
+            ->environmentBuilder
+            ->tearDown($this->kernel);
     }
 }

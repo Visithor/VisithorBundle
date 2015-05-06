@@ -27,8 +27,8 @@ class AppKernel extends Kernel
         return [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
-            new Visithor\Bundle\Tests\FakeBundle\FakeBundle(),
             new Visithor\Bundle\VisithorBundle(),
+            new Visithor\Bundle\Tests\FakeBundle\FakeBundle(),
         ];
     }
 
