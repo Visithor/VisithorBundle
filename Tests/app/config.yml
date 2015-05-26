@@ -4,6 +4,8 @@ imports:
 framework:
     test: ~
     secret: fhklsdhkj
+    form:
+        enabled: false
     session:
         storage_id: session.storage.mock_file
     profiler:

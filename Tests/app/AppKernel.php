@@ -39,4 +39,24 @@ class AppKernel extends Kernel
     {
         $loader->load(dirname(__FILE__) . '/config.yml');
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @api
+     */
+    public function getEnvironment()
+    {
+        return 'test';
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @api
+     */
+    public function isDebug()
+    {
+        return false;
+    }
 }
