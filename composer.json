@@ -12,19 +12,19 @@
     ],
     "require": {
         "php": ">=5.4",
-        "symfony/config": "~2.3",
-        "symfony/dependency-injection": "~2.3",
-        "symfony/console": "~2.3",
-        "symfony/routing": "~2.3",
-        "symfony/http-foundation": "~2.3",
-        "symfony/security": "~2.3",
-        "symfony/framework-bundle": "~2.3",
+        "symfony/config": "^2.3",
+        "symfony/dependency-injection": "^2.3",
+        "symfony/console": "^2.3",
+        "symfony/routing": "^2.3",
+        "symfony/http-foundation": "^2.3",
+        "symfony/security": "^2.3",
+        "symfony/framework-bundle": "^2.5.10,<2.6|^2.6.4",
 
-        "visithor/visithor": "~0.1, >=0.1.6"
+        "visithor/visithor": "^0.1, >=0.1.6"
     },
     "require-dev": {
-        "symfony/security-bundle": "~2.3",
-        "symfony/browser-kit": "~2.3",
+        "symfony/security-bundle": "^2.3",
+        "symfony/browser-kit": "^2.3",
 
         "fabpot/php-cs-fixer": "1.4.2",
         "mmoreram/php-formatter": "1.0.4",
@@ -38,7 +38,6 @@
             "Visithor\\Bundle\\": ""
         }
     },
-    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
             "dev-master": "0.1-dev"
