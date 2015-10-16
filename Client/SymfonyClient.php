@@ -65,10 +65,12 @@ class SymfonyClient implements ClientInterface
      */
     public function __construct(
         SessionInterface $session,
-        EnvironmentBuilderInterface $environmentBuilder = null
+        EnvironmentBuilderInterface $environmentBuilder = null,
+        \AppKernel $kernel = null
     ) {
         $this->session = $session;
         $this->environmentBuilder = $environmentBuilder;
+        $this->kernel = $kernel;
     }
 
     /**
@@ -78,7 +80,6 @@ class SymfonyClient implements ClientInterface
      */
     public function buildClient()
     {
-        $this->kernel = new \AppKernel('test', false);
         $this->kernel->boot();
         $this->session->clear();
 

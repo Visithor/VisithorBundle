@@ -8,3 +8,11 @@ services:
         arguments:
             - @session
             - @visitor.environment_builder
+            - @visithor.client.app_kernel
+
+    visithor.client.app_kernel:
+        public: false
+        class: AppKernel
+        arguments:
+            - "%kernel.environment%"
+            - "%kernel.debug%"
