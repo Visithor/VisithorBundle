@@ -1,8 +1,5 @@
 language: php
 
-env:
-    - COMPOSER_OPTIONS="--prefer-source"
-
 php:
     - 5.4
     - 5.5
@@ -12,12 +9,9 @@ php:
 
 matrix:
     fast_finish: true
-    include:
-        - php: 5.4
-          env: COMPOSER_OPTIONS="--prefer-lowest"
 
 install:
-    - composer update --no-interaction ${COMPOSER_OPTIONS}
+    - composer update --no-interaction --prefer-source
 
 script:
     - bin/phpunit
