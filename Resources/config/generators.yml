@@ -6,6 +6,6 @@ services:
     visithor.url_generator:
         class: Visithor\Bundle\Generator\SymfonyUrlGenerator
         arguments:
-            - @visithor.factory.url
-            - @visithor.factory.url_chain
-            - @router
+            - "@visithor.factory.url"
+            - "@visithor.factory.url_chain"
+            - "@router"

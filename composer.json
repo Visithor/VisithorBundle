@@ -26,9 +26,9 @@
         "symfony/security-bundle": "^2.3|^3.0",
         "symfony/browser-kit": "^2.3|^3.0",
 
-        "fabpot/php-cs-fixer": "1.4.2",
+        "fabpot/php-cs-fixer": "1.11",
         "mmoreram/php-formatter": "1.1.0",
-        "phpunit/phpunit": "4.5.0"
+        "phpunit/phpunit": "4.8.19"
     },
     "config": {
         "bin-dir": "bin"

@@ -6,9 +6,9 @@ services:
     visithor.client:
         class: Visithor\Bundle\Client\SymfonyClient
         arguments:
-            - @session
-            - @visitor.environment_builder
-            - @visithor.client.app_kernel
+            - "@session"
+            - "@visitor.environment_builder"
+            - "@visithor.client.app_kernel"
 
     visithor.client.app_kernel:
         public: false
